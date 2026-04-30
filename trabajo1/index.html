@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portafolio UPLA — Arquitectura de Software</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -107,6 +107,12 @@
     background: var(--accent-light);
   }
 
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .btn-login {
     display: flex;
     align-items: center;
@@ -118,6 +124,7 @@
     color: var(--text);
     font-size: 13px;
     font-weight: 500;
+    cursor: pointer;
     text-decoration: none;
     transition: background 0.15s, border-color 0.15s, color 0.15s;
   }
@@ -128,47 +135,82 @@
     color: var(--accent);
   }
 
+  /* HERO REDISEÑADO */
   .hero {
-    max-width: 1100px;
+    max-width: 1180px;
     margin: 0 auto;
-    padding: 80px 2rem 60px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
+    padding: 92px 2rem 72px;
+  }
+
+  .hero-shell {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 64px 48px 36px;
+    background:
+      linear-gradient(135deg, rgba(239,246,255,0.95), rgba(255,255,255,0.94) 48%, rgba(248,250,252,1)),
+      radial-gradient(circle at top right, rgba(37,99,235,0.18), transparent 32%);
+  }
+
+  .hero-shell::before {
+    content: '';
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    right: -90px;
+    top: -90px;
+    border-radius: 50%;
+    border: 42px solid rgba(37,99,235,0.08);
+  }
+
+  .hero-shell::after {
+    content: '';
+    position: absolute;
+    left: 48px;
+    bottom: 116px;
+    width: 90px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--accent);
   }
 
   .hero-eyebrow {
+    position: relative;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: var(--accent-light);
+    gap: 8px;
+    background: white;
     border: 1px solid var(--accent-mid);
     color: var(--accent);
     font-size: 12px;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 100px;
-    letter-spacing: 0.04em;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 28px;
   }
 
   .hero-eyebrow::before {
     content: '';
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--accent);
   }
 
   .hero h1 {
+    position: relative;
+    z-index: 1;
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(2.4rem, 5vw, 3.8rem);
-    line-height: 1.1;
+    font-size: clamp(3rem, 7vw, 5.7rem);
+    line-height: 0.96;
     color: var(--navy);
-    margin-bottom: 8px;
     font-weight: 400;
+    max-width: 850px;
+    margin-bottom: 24px;
   }
 
   .hero h1 span {
@@ -177,26 +219,31 @@
   }
 
   .hero-sub {
-    font-size: 16px;
+    position: relative;
+    z-index: 1;
+    font-size: 17px;
     color: var(--muted);
-    margin: 16px 0 32px;
-    max-width: 440px;
-    line-height: 1.7;
+    max-width: 610px;
+    line-height: 1.8;
+    margin-bottom: 34px;
   }
 
   .hero-actions {
+    position: relative;
+    z-index: 1;
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
+    margin-bottom: 42px;
   }
 
   .btn-primary {
-    padding: 12px 24px;
-    border-radius: 10px;
+    padding: 13px 24px;
+    border-radius: 12px;
     background: var(--accent);
     color: white;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     border: none;
     cursor: pointer;
     text-decoration: none;
@@ -212,76 +259,58 @@
   }
 
   .btn-ghost {
-    padding: 12px 24px;
-    border-radius: 10px;
-    background: transparent;
+    padding: 13px 24px;
+    border-radius: 12px;
+    background: white;
     color: var(--text);
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     border: 1px solid var(--border);
     cursor: pointer;
     text-decoration: none;
-    transition: background 0.15s;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
   }
 
   .btn-ghost:hover {
     background: var(--surface);
+    border-color: var(--accent-mid);
+    color: var(--accent);
   }
 
-  .hero-card {
-    background: var(--surface);
+  .hero-info-strip {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 28px;
-    position: relative;
     overflow: hidden;
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(10px);
   }
 
-  .hero-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), #60a5fa);
+  .hero-info-strip div {
+    padding: 18px 20px;
+    border-right: 1px solid var(--border);
   }
 
-  .card-dots {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 16px;
+  .hero-info-strip div:last-child {
+    border-right: none;
   }
 
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
-
-  .dot-r { background: #f87171; }
-  .dot-y { background: #fbbf24; }
-  .dot-g { background: var(--success); }
-
-  .hero-card h3 {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 12px;
-  }
-
-  .hero-card p {
-    font-size: 14px;
+  .hero-info-strip span {
+    display: block;
+    font-size: 11px;
     color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    font-weight: 700;
   }
 
-  .hero-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 16px;
+  .hero-info-strip strong {
+    font-size: 14px;
+    color: var(--text);
   }
 
   .tag {
@@ -551,14 +580,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 11px;
+    font-weight: 700;
     color: var(--accent);
     flex-shrink: 0;
   }
 
   .file-name {
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text);
   }
 
@@ -634,9 +664,25 @@
     }
 
     .hero {
+      padding: 40px 1rem 36px;
+    }
+
+    .hero-shell {
+      padding: 42px 24px 24px;
+      border-radius: 18px;
+    }
+
+    .hero-info-strip {
       grid-template-columns: 1fr;
-      gap: 32px;
-      padding: 48px 1.5rem 40px;
+    }
+
+    .hero-info-strip div {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-info-strip div:last-child {
+      border-bottom: none;
     }
 
     .section {
@@ -682,42 +728,39 @@
 </nav>
 
 <section class="hero" id="inicio">
-  <div class="hero-left">
+  <div class="hero-shell">
     <div class="hero-eyebrow">Ingeniería de Sistemas y Computación</div>
-    <h1>Mi<br><span>Portafolio</span><br>Arquitectura<br>de Software</h1>
+
+    <h1>
+      Portafolio de<br>
+      <span>Arquitectura de Software</span>
+    </h1>
+
     <p class="hero-sub">
-      Trabajos desarrollados en el curso de Arquitectura de Software, organizados por unidades y semanas académicas.
+      Evidencias, trabajos y recursos desarrollados durante el curso, organizados por unidades y semanas académicas.
     </p>
+
     <div class="hero-actions">
       <a href="#unidades" class="btn-primary">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
-        Ver proyectos
+        Ver unidades
       </a>
-      <a href="#unidades" class="btn-ghost">Explorar unidades</a>
+      <a href="#unit-acc-1" class="btn-ghost">Ir a semanas</a>
     </div>
-  </div>
 
-  <div class="hero-card">
-    <div class="card-dots">
-      <div class="dot dot-r"></div>
-      <div class="dot dot-y"></div>
-      <div class="dot dot-g"></div>
-    </div>
-    <h3>Acerca del Curso</h3>
-    <p>
-      En este portafolio se presentarán los trabajos desarrollados en el curso de
-      <strong>Arquitectura de Software</strong>, organizados por unidades y semanas.
-    </p>
-    <p>
-      Se abordarán temas como el diseño de sistemas, patrones arquitectónicos,
-      modelado de soluciones y buenas prácticas para el desarrollo de software
-      eficiente, escalable y mantenible.
-    </p>
-    <div class="hero-tags">
-      <span class="tag">#Sistemas</span>
-      <span class="tag">#Diseño</span>
-      <span class="tag">#Escalabilidad</span>
-      <span class="tag">#Patrones</span>
+    <div class="hero-info-strip">
+      <div>
+        <span>Curso</span>
+        <strong>Arquitectura de Software</strong>
+      </div>
+      <div>
+        <span>Organización</span>
+        <strong>4 unidades · 16 semanas</strong>
+      </div>
+      <div>
+        <span>Institución</span>
+        <strong>UPLA</strong>
+      </div>
     </div>
   </div>
 </section>
