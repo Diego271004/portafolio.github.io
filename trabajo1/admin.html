@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel Admin · UPLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --text: #111112;
+      --muted: #888890;
+      --subtle: #bbbbc4;
+      --border: #e8e8ec;
+      --bg: #ffffff;
+      --surface: #fafafa;
+      --error: #c0392b;
+      --success: #1a6b3c;
+    }
+
+    body {
+      font-family: 'Geist', sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--bg);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .sidebar-logo {
+      margin-bottom: 2rem;
+    }
+    .sidebar-logo img { height: 24px; opacity: 0.7; }
+
+    .nav-section-label {
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      margin-bottom: 0.4rem;
+      margin-top: 0.5rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.5rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      color: var(--muted);
+      transition: all 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: 'Geist', sans-serif;
+    }
+    .nav-item:hover { background: var(--surface); color: var(--text); }
+    .nav-item.active { background: var(--surface); color: var(--text); font-weight: 500; }
+
+    .spacer { flex: 1; }
+
+    .user-block {
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    .user-name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+
+    .user-email {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      word-break: break-all;
+    }
+
+    .btn-logout {
+      width: 100%;
+      padding: 0.45rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Geist', sans-serif;
+      font-size: 0.75rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-logout:hover { border-color: var(--error); color: var(--error); }
+
+    /* ── MAIN ── */
+    .main {
+      padding: 2.5rem 3rem;
+      max-width: 780px;
+    }
+
+    .page-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .page-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.3rem;
+    }
+
+    .page-sub {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--border);
+      margin-bottom: 2.5rem;
+    }
+
+    .stat {
+      background: var(--bg);
+      padding: 1.25rem 1.5rem;
+    }
+
+    .stat-val {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-lbl {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* FORM CARD */
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .card-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .field.full { grid-column: 1/-1; }
+
+    label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input[type="text"], textarea, select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+      color: var(--text);
+      font-family: 'Geist', sans-serif;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--text); }
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+    textarea { resize: vertical; min-height: 75px; }
+
+    select { cursor: pointer; }
+    select option { background: white; }
+
+    /* Upload zone */
+    .upload-zone {
+      border: 1.5px dashed var(--border);
+      border-radius: 8px;
+      padding: 1.75rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      background: var(--surface);
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--text);
+      background: #f5f5f5;
+    }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    }
+    .upload-text { font-size: 0.85rem; color: var(--muted); }
+    .upload-text strong { color: var(--text); }
+    .upload-filename { margin-top: 0.5rem; font-size: 0.82rem; color: var(--text); font-weight: 500; }
+
+    .progress-bar {
+      width: 100%; height: 2px;
+      background: var(--border); border-radius: 2px;
+      margin-top: 0.75rem; overflow: hidden; display: none;
+    }
+    .progress-fill { height: 100%; background: var(--text); width: 0%; transition: width 0.3s; }
+
+    /* Botones */
+    .form-actions { display: flex; gap: 0.65rem; margin-top: 1.25rem; }
+
+    .btn-primary {
+      flex: 1;
+      padding: 0.72rem;
+      background: var(--text);
+      color: white;
+      font-family: 'Geist', sans-serif;
+      font-weight: 500;
+      font-size: 0.875rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.75; }
+    .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .btn-secondary {
+      padding: 0.72rem 1.25rem;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Geist', sans-serif;
+      font-size: 0.875rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--text); color: var(--text); }
+
+    /* TABLE */
+    .table-wrap { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+
+    thead tr { border-bottom: 1px solid var(--border); }
+
+    th {
+      text-align: left;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface); }
+
+    td { padding: 0.85rem 0.75rem; vertical-align: middle; }
+
+    .td-title { font-weight: 500; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      font-size: 0.68rem;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .badge-active { border-color: #a8d5b5; color: var(--success); background: #f0faf4; }
+
+    .action-btns { display: flex; gap: 0.4rem; }
+
+    .btn-sm {
+      padding: 0.25rem 0.65rem;
+      font-size: 0.72rem;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      transition: all 0.1s;
+      font-family: 'Geist', sans-serif;
+    }
+    .btn-sm:hover { color: var(--text); border-color: var(--text); }
+    .btn-sm.danger:hover { color: var(--error); border-color: var(--error); }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      padding: 0.8rem 1.25rem;
+      background: var(--text);
+      color: white;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.25s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error { background: var(--error); }
+
+    /* SEMANA BADGE en selector */
+    .week-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.45rem;
+      color: var(--muted);
+      margin-left: 0.3rem;
+    }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="LOGO-HORIZONTAL.jpg" alt="UPLA"/>
+    </div>
+
+    <div class="nav-section-label">Menú</div>
+    <button class="nav-item active" onclick="showSection('upload')">↑ Subir archivo</button>
+    <button class="nav-item" onclick="showSection('list')">≡ Todos los archivos</button>
+    <button class="nav-item" onclick="window.open('index.html','_blank')">↗ Ver sitio</button>
+
+    <div class="spacer"></div>
+
+    <div class="user-block">
+      <div class="user-name">Juan Diego Villanueva</div>
+      <div class="user-email" id="userEmail">—</div>
+      <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- SUBIR -->
+    <div id="section-upload">
+      <div class="page-eyebrow">Universidad Peruana Los Andes</div>
+      <h1 class="page-title">Subir archivo</h1>
+      <p class="page-sub">Elige la semana y sube el archivo correspondiente.</p>
+
+      <div class="stats" id="statsArea">
+        <div class="stat">
+          <div class="stat-val" id="stat-total">—</div>
+          <div class="stat-lbl">Archivos totales</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="stat-semanas">—</div>
+          <div class="stat-lbl">Semanas con contenido</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="stat-recientes">—</div>
+          <div class="stat-lbl">Últimos 7 días</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Nuevo archivo</div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Semana *</label>
+            <select id="semanaNum">
+              <option value="">Selecciona una semana...</option>
+              <option value="1">Semana 1</option>
+              <option value="2">Semana 2</option>
+              <option value="3">Semana 3</option>
+              <option value="4">Semana 4</option>
+              <option value="5">Semana 5</option>
+              <option value="6">Semana 6</option>
+              <option value="7">Semana 7</option>
+              <option value="8">Semana 8</option>
+              <option value="9">Semana 9</option>
+              <option value="10">Semana 10</option>
+              <option value="11">Semana 11</option>
+              <option value="12">Semana 12</option>
+              <option value="13">Semana 13</option>
+              <option value="14">Semana 14</option>
+              <option value="15">Semana 15</option>
+              <option value="16">Semana 16</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Título *</label>
+            <input type="text" id="titulo" placeholder="Ej: Diagrama de clases UML"/>
+          </div>
+          <div class="field full">
+            <label>Descripción</label>
+            <textarea id="descripcion" placeholder="Describe brevemente el contenido..."></textarea>
+          </div>
+          <div class="field full">
+            <label>Archivo (PDF, Word, Excel, PPT)</label>
+            <div class="upload-zone" id="uploadZone">
+              <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"/>
+              <div class="upload-text">Arrastra aquí o <strong>haz clic para seleccionar</strong></div>
+              <div class="upload-filename" id="fileName"></div>
+              <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-primary" id="submitBtn" onclick="submitWork()">Publicar archivo</button>
+          <button class="btn-secondary" onclick="resetForm()">Limpiar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTA -->
+    <div id="section-list" style="display:none">
+      <div class="page-eyebrow">Universidad Peruana Los Andes</div>
+      <h1 class="page-title">Todos los archivos</h1>
+      <p class="page-sub">Gestiona los archivos publicados por semana.</p>
+
+      <!-- Filtro por semana -->
+      <div style="margin-bottom:1.5rem;display:flex;gap:0.5rem;align-items:center">
+        <label style="font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em">Filtrar:</label>
+        <select id="filterSemana" onchange="loadWorksList()" style="max-width:180px;padding:0.45rem 0.75rem;font-size:0.82rem">
+          <option value="">Todas las semanas</option>
+          <option value="1">Semana 1</option>
+          <option value="2">Semana 2</option>
+          <option value="3">Semana 3</option>
+          <option value="4">Semana 4</option>
+          <option value="5">Semana 5</option>
+          <option value="6">Semana 6</option>
+          <option value="7">Semana 7</option>
+          <option value="8">Semana 8</option>
+          <option value="9">Semana 9</option>
+          <option value="10">Semana 10</option>
+          <option value="11">Semana 11</option>
+          <option value="12">Semana 12</option>
+          <option value="13">Semana 13</option>
+          <option value="14">Semana 14</option>
+          <option value="15">Semana 15</option>
+          <option value="16">Semana 16</option>
+        </select>
+      </div>
+
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Semana</th>
+                <th>Título</th>
+                <th>Tipo</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="workTableBody">
+              <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2.5rem">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script type="module">
+  import { supabase } from './js/supabase.js'
+
+  // AUTH
+
+const { data: { session }, error } = await supabase.auth.getSession()
+
+if (error || !session) {
+  localStorage.clear()
+  sessionStorage.clear()
+  window.location.replace('login.html')
+  throw new Error('Sin sesión activa')
+}
+
+document.getElementById('userEmail').textContent = session.user.email
+loadStats()
+
+
+  // NAV
+  window.showSection = (name) => {
+    document.getElementById('section-upload').style.display = name === 'upload' ? 'block' : 'none'
+    document.getElementById('section-list').style.display = name === 'list' ? 'block' : 'none'
+    document.querySelectorAll('.nav-item').forEach((b, i) => {
+      b.classList.toggle('active', (name==='upload'&&i===0)||(name==='list'&&i===1))
+    })
+    if (name === 'list') loadWorksList()
+  }
+
+  // TOAST
+  window.showToast = (msg, type='success') => {
+    const t = document.getElementById('toast')
+    t.textContent = msg
+    t.className = `toast ${type} show`
+    setTimeout(() => t.classList.remove('show'), 3200)
+  }
+
+  // LOGOUT
+  window.logout = async () => {
+  await supabase.auth.signOut()
+  localStorage.clear()
+  sessionStorage.clear()
+  window.location.replace('login.html')
+}
+
+
+
+  // ARCHIVO
+  const fileInput = document.getElementById('fileInput')
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) document.getElementById('fileName').textContent = `✓ ${fileInput.files[0].name}`
+  })
+
+  const zone = document.getElementById('uploadZone')
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over') })
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'))
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag-over')
+    fileInput.files = e.dataTransfer.files
+    if (fileInput.files[0]) document.getElementById('fileName').textContent = `✓ ${fileInput.files[0].name}`
+  })
+
+  // SUBIR
+  window.submitWork = async () => {
+    const semana_num = parseInt(document.getElementById('semanaNum').value)
+    const titulo = document.getElementById('titulo').value.trim()
+    const descripcion = document.getElementById('descripcion').value.trim()
+    const file = fileInput.files[0]
+    const btn = document.getElementById('submitBtn')
+
+    if (!semana_num) { showToast('Selecciona una semana.', 'error'); return }
+    if (!titulo) { showToast('El título es obligatorio.', 'error'); return }
+
+    btn.disabled = true
+    btn.textContent = 'Publicando...'
+
+    let archivo_url = null, archivo_nombre = null, tipo_archivo = null
+
+    if (file) {
+      tipo_archivo = file.name.split('.').pop()
+      archivo_nombre = file.name
+      const path = `semana-${semana_num}/${Date.now()}_${file.name.replace(/\s+/g,'_')}`
+
+      const bar = document.getElementById('progressBar')
+      const fill = document.getElementById('progressFill')
+      bar.style.display = 'block'
+      fill.style.width = '30%'
+
+      const { error: upErr } = await supabase.storage.from('trabajos').upload(path, file, { cacheControl: '3600', upsert: false })
+      fill.style.width = '80%'
+
+      if (upErr) {
+        showToast('Error al subir archivo: ' + upErr.message, 'error')
+        btn.disabled = false; btn.textContent = 'Publicar archivo'
+        bar.style.display = 'none'; return
+      }
+
+      const { data: urlData } = supabase.storage.from('trabajos').getPublicUrl(path)
+      archivo_url = urlData.publicUrl
+      fill.style.width = '100%'
+      setTimeout(() => { bar.style.display = 'none'; fill.style.width = '0%' }, 600)
+    }
+
+    const semana_label = `Semana ${semana_num}`
+
+    const { error } = await supabase.from('trabajos').insert([{
+      titulo, descripcion, semana_num, semana: semana_label,
+      archivo_url, archivo_nombre, tipo_archivo
+    }])
+
+    if (error) {
+      showToast('Error: ' + error.message, 'error')
+    } else {
+      showToast(`✓ Archivo publicado en Semana ${semana_num}`)
+      resetForm(); loadStats()
+    }
+
+    btn.disabled = false; btn.textContent = 'Publicar archivo'
+  }
+
+  // RESET
+  window.resetForm = () => {
+    document.getElementById('semanaNum').value = ''
+    document.getElementById('titulo').value = ''
+    document.getElementById('descripcion').value = ''
+    document.getElementById('fileName').textContent = ''
+    fileInput.value = ''
+  }
+
+  // STATS
+  async function loadStats() {
+    const { data } = await supabase.from('trabajos').select('id, semana_num, activo, fecha_subida')
+    if (!data) return
+    const hoy = new Date()
+    const semanas = new Set(data.filter(w=>w.activo).map(w=>w.semana_num)).size
+    document.getElementById('stat-total').textContent = data.length
+    document.getElementById('stat-semanas').textContent = semanas
+    document.getElementById('stat-recientes').textContent = data.filter(w=>((hoy-new Date(w.fecha_subida))/86400000)<=7).length
+  }
+
+  // LISTA
+  window.loadWorksList = async () => {
+    const filtro = document.getElementById('filterSemana')?.value
+    const tbody = document.getElementById('workTableBody')
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">Cargando...</td></tr>`
+
+    let query = supabase.from('trabajos').select('*').order('semana_num').order('fecha_subida', { ascending: false })
+    if (filtro) query = query.eq('semana_num', parseInt(filtro))
+
+    const { data, error } = await query
+
+    if (error || !data?.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">Sin archivos</td></tr>`
+      return
+    }
+
+    tbody.innerHTML = data.map(w => `
+      <tr>
+        <td><span class="badge">Sem. ${w.semana_num}</span></td>
+        <td class="td-title">${w.titulo}</td>
+        <td style="color:var(--muted);font-size:0.8rem">${w.tipo_archivo ? w.tipo_archivo.toUpperCase() : '—'}</td>
+        <td style="color:var(--muted);font-size:0.78rem">${new Date(w.fecha_subida).toLocaleDateString('es-ES')}</td>
+        <td><span class="badge ${w.activo?'badge-active':''}">${w.activo?'Publicado':'Oculto'}</span></td>
+        <td>
+          <div class="action-btns">
+            ${w.archivo_url?`<a href="${w.archivo_url}" target="_blank"><button class="btn-sm">Ver</button></a>`:''}
+            <button class="btn-sm" onclick="toggleWork('${w.id}',${w.activo})">${w.activo?'Ocultar':'Mostrar'}</button>
+            <button class="btn-sm danger" onclick="deleteWork('${w.id}')">Eliminar</button>
+          </div>
+        </td>
+      </tr>`).join('')
+  }
+
+  window.toggleWork = async (id, current) => {
+    await supabase.from('trabajos').update({ activo: !current }).eq('id', id)
+    showToast(current ? 'Archivo ocultado' : 'Archivo publicado')
+    loadWorksList(); loadStats()
+  }
+
+  window.deleteWork = async (id) => {
+    if (!confirm('¿Eliminar este archivo? No se puede deshacer.')) return
+    await supabase.from('trabajos').delete().eq('id', id)
+    showToast('Archivo eliminado')
+    loadWorksList(); loadStats()
+  }
+</script>
+</body>
+</html>

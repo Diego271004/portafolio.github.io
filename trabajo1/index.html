@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portafolio UPLA — Arquitectura de Software</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0f1b2d;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --accent-mid: #bfdbfe;
+    --text: #0f1b2d;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --bg: #ffffff;
+    --surface: #f8fafc;
+    --success: #10b981;
+    --tag-bg: #f1f5f9;
+    --tag-text: #334155;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .nav-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'DM Serif Display', serif;
+    font-size: 14px;
+  }
+
+  .nav-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+
+  .nav-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .nav-sub {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .btn-login {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+
+  .btn-login:hover {
+    background: var(--surface);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 2rem 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-light);
+    border: 1px solid var(--accent-mid);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    line-height: 1.1;
+    color: var(--navy);
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  .hero h1 span {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    margin: 16px 0 32px;
+    max-width: 440px;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 12px 24px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    padding: 12px 24px;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .btn-ghost:hover {
+    background: var(--surface);
+  }
+
+  .hero-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), #60a5fa);
+  }
+
+  .card-dots {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot-r { background: #f87171; }
+  .dot-y { background: #fbbf24; }
+  .dot-g { background: var(--success); }
+
+  .hero-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .hero-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .tag {
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 2rem;
+  }
+
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--navy);
+  }
+
+  .section-title span {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .unit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .unit-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+    transition: box-shadow 0.2s, transform 0.15s, border-color 0.15s;
+    cursor: pointer;
+  }
+
+  .unit-card:hover {
+    box-shadow: 0 8px 24px rgba(37,99,235,0.1);
+    transform: translateY(-2px);
+    border-color: var(--accent-mid);
+  }
+
+  .unit-card-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .unit-badge {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .unit-weeks {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 100px;
+  }
+
+  .unit-card-body {
+    padding: 16px 18px;
+  }
+
+  .unit-card-body h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .unit-card-body p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .unit-card-footer {
+    padding: 12px 18px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 6px;
+  }
+
+  .weeks-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 60px;
+  }
+
+  .unit-anchor {
+    scroll-margin-top: 86px;
+    margin-bottom: 40px;
+  }
+
+  .weeks-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 20px;
+  }
+
+  .weeks-title .unit-label {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .acc-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg);
+    transition: border-color 0.15s;
+  }
+
+  .acc-item.open {
+    border-color: var(--accent-mid);
+  }
+
+  .acc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    background: var(--bg);
+    transition: background 0.15s;
+    user-select: none;
+  }
+
+  .acc-header:hover {
+    background: var(--surface);
+  }
+
+  .acc-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .acc-week-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--accent-light);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .acc-item.open .acc-week-num {
+    background: var(--accent);
+    color: white;
+  }
+
+  .acc-week-label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .acc-week-count {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .acc-arrow {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 11px;
+    transition: transform 0.2s, background 0.15s;
+  }
+
+  .acc-item.open .acc-arrow {
+    transform: rotate(180deg);
+    background: var(--accent-light);
+    border-color: var(--accent-mid);
+    color: var(--accent);
+  }
+
+  .acc-body {
+    display: none;
+    padding: 0 20px 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .acc-item.open .acc-body {
+    display: block;
+  }
+
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .file-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .file-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .file-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .file-meta {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .btn-download {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+
+  .btn-download:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 28px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface) 25%, var(--border) 50%, var(--surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+    height: 40px;
+    width: 100%;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 2rem;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  footer strong {
+    color: var(--text);
+  }
+
+  @media (max-width: 768px) {
+    nav {
+      padding: 0 1rem;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 48px 1.5rem 40px;
+    }
+
+    .section {
+      padding: 40px 1.5rem;
+    }
+
+    .weeks-section {
+      padding: 0 1.5rem 40px;
+    }
+
+    .file-item {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="#inicio">
+    <div class="nav-logo">U</div>
+    <div class="nav-info">
+      <span class="nav-name">Juan Diego Villanueva Quispe</span>
+      <span class="nav-sub">Portafolio UPLA</span>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="#inicio" class="active">Inicio</a>
+    <a href="#unit-acc-1">Unidad I</a>
+    <a href="#unit-acc-2">Unidad II</a>
+    <a href="#unit-acc-3">Unidad III</a>
+    <a href="#unit-acc-4">Unidad IV</a>
+  </div>
+
+  <div class="nav-right">
+    <a href="login.html" class="btn-login">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Iniciar Sesión
+    </a>
+  </div>
+</nav>
+
+<section class="hero" id="inicio">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Ingeniería de Sistemas y Computación</div>
+    <h1>Mi<br><span>Portafolio</span><br>Arquitectura<br>de Software</h1>
+    <p class="hero-sub">
+      Trabajos desarrollados en el curso de Arquitectura de Software, organizados por unidades y semanas académicas.
+    </p>
+    <div class="hero-actions">
+      <a href="#unidades" class="btn-primary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+        Ver proyectos
+      </a>
+      <a href="#unidades" class="btn-ghost">Explorar unidades</a>
+    </div>
+  </div>
+
+  <div class="hero-card">
+    <div class="card-dots">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+    </div>
+    <h3>Acerca del Curso</h3>
+    <p>
+      En este portafolio se presentarán los trabajos desarrollados en el curso de
+      <strong>Arquitectura de Software</strong>, organizados por unidades y semanas.
+    </p>
+    <p>
+      Se abordarán temas como el diseño de sistemas, patrones arquitectónicos,
+      modelado de soluciones y buenas prácticas para el desarrollo de software
+      eficiente, escalable y mantenible.
+    </p>
+    <div class="hero-tags">
+      <span class="tag">#Sistemas</span>
+      <span class="tag">#Diseño</span>
+      <span class="tag">#Escalabilidad</span>
+      <span class="tag">#Patrones</span>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section" id="unidades">
+  <div class="section-header">
+    <h2 class="section-title">Unidades del <span>Curso</span></h2>
+  </div>
+  <div class="unit-grid" id="unidades-grid">
+    <div style="grid-column:1/-1; color: var(--muted); font-size:14px; text-align:center; padding:20px;">
+      Cargando unidades...
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<div class="weeks-section">
+  <div id="units-accordion"></div>
+</div>
+
+<footer>
+  <strong>Juan Diego Villanueva Quispe</strong> · Arquitectura de Software · UPLA
+  <br>
+  <span>Ingeniería de Sistemas y Computación</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://uhcrijrmckpagnkilclq.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_ssLtd3jyOa7EYUzjEHLjqg_gpVFQTcw';
+
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const UNITS = [
+    { id: 1, label: 'I', title: 'Fundamentos', desc: 'Introducción a arquitectura de software y patrones básicos.' },
+    { id: 2, label: 'II', title: 'Diseño', desc: 'Modelado UML, diagramas de componentes y casos de uso.' },
+    { id: 3, label: 'III', title: 'Patrones', desc: 'Patrones arquitectónicos: MVC, microservicios, eventos.' },
+    { id: 4, label: 'IV', title: 'Calidad', desc: 'Escalabilidad, mantenibilidad y evaluación de sistemas.' },
+  ];
+
+  function renderUnitCards() {
+    const grid = document.getElementById('unidades-grid');
+
+    grid.innerHTML = UNITS.map(unit => `
+      <div class="unit-card" onclick="scrollToUnit(${unit.id})">
+        <div class="unit-card-header">
+          <span class="unit-badge">${unit.label}</span>
+          <span class="unit-weeks">4 semanas</span>
+        </div>
+        <div class="unit-card-body">
+          <h3>Unidad ${unit.label} — ${unit.title}</h3>
+          <p>${unit.desc}</p>
+        </div>
+        <div class="unit-card-footer">
+          <span class="tag">Ver semanas</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function scrollToUnit(id) {
+    const target = document.getElementById(`unit-acc-${id}`);
+
+    if (!target) return;
+
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    setTimeout(() => {
+      toggleAcc(`${id}-1`, true);
+    }, 350);
+
+    setActiveNav(`unit-acc-${id}`);
+  }
+
+  async function renderAccordion() {
+    const container = document.getElementById('units-accordion');
+    container.innerHTML = '';
+
+    for (const unit of UNITS) {
+      const section = document.createElement('div');
+      section.className = 'unit-anchor';
+      section.id = `unit-acc-${unit.id}`;
+
+      section.innerHTML = `
+        <h2 class="weeks-title">Unidad <span class="unit-label">${unit.label}</span> — ${unit.title}</h2>
+        <div class="accordion" id="accordion-${unit.id}">
+          ${[1, 2, 3, 4].map(week => `
+            <div class="acc-item" id="acc-${unit.id}-${week}">
+              <div class="acc-header" onclick="toggleAcc('${unit.id}-${week}')">
+                <div class="acc-header-left">
+                  <div class="acc-week-num">${week}</div>
+                  <div>
+                    <div class="acc-week-label">Semana ${week}</div>
+                    <div class="acc-week-count" id="count-${unit.id}-${week}">Cargando...</div>
+                  </div>
+                </div>
+                <div class="acc-arrow">▾</div>
+              </div>
+              <div class="acc-body">
+                <div class="file-list" id="files-${unit.id}-${week}">
+                  <div class="skeleton"></div>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      container.appendChild(section);
+    }
+
+    await loadFiles();
+  }
+
+  async function loadFiles() {
+    for (const unit of UNITS) {
+      for (let week = 1; week <= 4; week++) {
+        const semanaNum = ((unit.id - 1) * 4) + week;
+        const countEl = document.getElementById(`count-${unit.id}-${week}`);
+        const listEl = document.getElementById(`files-${unit.id}-${week}`);
+
+        try {
+          const { data, error } = await db
+            .from('trabajos')
+            .select('*')
+            .eq('semana_num', semanaNum)
+            .eq('activo', true)
+            .order('fecha_subida', { ascending: false });
+
+          if (error) throw error;
+
+          if (!data || data.length === 0) {
+            countEl.textContent = 'Sin archivos aún';
+            listEl.innerHTML = `<div class="empty-state">No hay trabajos publicados esta semana.</div>`;
+            continue;
+          }
+
+          countEl.textContent = `${data.length} archivo${data.length !== 1 ? 's' : ''}`;
+
+          listEl.innerHTML = data.map(file => `
+            <div class="file-item">
+              <div class="file-info">
+                <div class="file-icon">${getIcon(file.tipo_archivo || file.archivo_nombre)}</div>
+                <div>
+                  <div class="file-name">${escapeHtml(file.titulo || 'Trabajo')}</div>
+                  <div class="file-meta">${escapeHtml(file.descripcion || '')} · ${formatDate(file.fecha_subida)}</div>
+                </div>
+              </div>
+
+              <a href="${file.archivo_url}" target="_blank" class="btn-download" download>
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Descargar
+              </a>
+            </div>
+          `).join('');
+
+        } catch (error) {
+          console.error(error);
+          countEl.textContent = 'Error al cargar';
+          listEl.innerHTML = `<div class="empty-state">No se pudieron cargar los trabajos.</div>`;
+        }
+      }
+    }
+  }
+
+  function toggleAcc(id, forceOpen = false) {
+    const item = document.getElementById(`acc-${id}`);
+
+    if (!item) return;
+
+    if (forceOpen) {
+      item.classList.add('open');
+    } else {
+      item.classList.toggle('open');
+    }
+  }
+
+  function getIcon(name) {
+    if (!name) return 'PDF';
+
+    const normalized = name.toLowerCase();
+
+    if (normalized.includes('pdf')) return 'PDF';
+    if (normalized.includes('doc') || normalized.includes('word')) return 'DOC';
+    if (normalized.includes('xls') || normalized.includes('excel')) return 'XLS';
+    if (normalized.includes('ppt') || normalized.includes('slide')) return 'PPT';
+    if (normalized.includes('zip') || normalized.includes('rar')) return 'ZIP';
+    if (normalized.includes('png') || normalized.includes('jpg') || normalized.includes('jpeg')) return 'IMG';
+
+    return 'FILE';
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+
+    return new Date(iso).toLocaleDateString('es-PE', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  }
+
+  function setActiveNav(targetId) {
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      const href = link.getAttribute('href');
+      link.classList.toggle('active', href === `#${targetId}`);
+    });
+  }
+
+  function setupNavLinks() {
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', event => {
+        const href = link.getAttribute('href');
+
+        if (!href || !href.startsWith('#')) return;
+
+        event.preventDefault();
+
+        const targetId = href.replace('#', '');
+        const target = document.getElementById(targetId);
+
+        if (!target) return;
+
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        document.querySelectorAll('.nav-links a').forEach(item => item.classList.remove('active'));
+        link.classList.add('active');
+
+        if (targetId.startsWith('unit-acc-')) {
+          const unitId = targetId.replace('unit-acc-', '');
+
+          setTimeout(() => {
+            toggleAcc(`${unitId}-1`, true);
+          }, 350);
+        }
+      });
+    });
+  }
+
+  function escapeHtml(value) {
+    return String(value || '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
+  renderUnitCards();
+
+  renderAccordion().then(() => {
+    setupNavLinks();
+  });
+</script>
+</body>
+</html>

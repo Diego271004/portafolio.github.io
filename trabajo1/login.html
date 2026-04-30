@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso Admin · UPLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --text: #111112;
+      --muted: #777780;
+      --subtle: #b8b8c2;
+      --border: #e8e8ec;
+      --bg: #ffffff;
+      --surface: #f7f7f8;
+      --error: #c0392b;
+      --success: #1a6b3c;
+      --accent: #111112;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Geist', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(17,17,18,0.08), transparent 34%),
+        linear-gradient(135deg, #ffffff 0%, #f3f4f6 48%, #eef2ff 100%);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+    }
+
+    .login-shell {
+      width: 100%;
+      max-width: 980px;
+      min-height: 560px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(232,232,236,0.9);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-panel {
+      padding: 2.5rem;
+      background: #111112;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-panel::after {
+      content: '';
+      position: absolute;
+      inset: auto -20% -35% 20%;
+      height: 260px;
+      background: linear-gradient(135deg, rgba(147,197,253,0.22), rgba(255,255,255,0.06));
+      transform: rotate(-8deg);
+      border-radius: 40px;
+    }
+
+    .brand-top {
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: white;
+      color: #111112;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: rgba(255,255,255,0.58);
+      margin-bottom: 0.75rem;
+    }
+
+    .brand-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.2rem, 5vw, 3.3rem);
+      font-weight: 400;
+      line-height: 0.95;
+      max-width: 380px;
+    }
+
+    .brand-title span {
+      font-style: italic;
+      color: #bfdbfe;
+    }
+
+    .brand-copy {
+      position: relative;
+      z-index: 1;
+      max-width: 360px;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.68);
+    }
+
+    .login-panel {
+      padding: 2.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .login-card {
+      width: 100%;
+    }
+
+    .login-kicker {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.55rem;
+      font-weight: 500;
+    }
+
+    h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2.15rem;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.45rem;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 0.45rem;
+    }
+
+    input {
+      width: 100%;
+      height: 46px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: 'Geist', sans-serif;
+      font-size: 0.92rem;
+      padding: 0 0.95rem;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+    }
+
+    input:focus {
+      background: white;
+      border-color: #111112;
+      box-shadow: 0 0 0 4px rgba(17,17,18,0.07);
+    }
+
+    button {
+      width: 100%;
+      height: 46px;
+      margin-top: 0.35rem;
+      border: none;
+      border-radius: 10px;
+      background: #111112;
+      color: white;
+      font-family: 'Geist', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      opacity: 0.86;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .message {
+      min-height: 22px;
+      margin-top: 1rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .message.error {
+      color: var(--error);
+    }
+
+    .message.success {
+      color: var(--success);
+    }
+
+    .back-link {
+      display: inline-flex;
+      margin-top: 1.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.15s;
+    }
+
+    .back-link:hover {
+      color: var(--text);
+    }
+
+    @media (max-width: 780px) {
+      .login-shell {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .brand-panel {
+        min-height: 260px;
+      }
+
+      .login-panel {
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="login-shell">
+    <section class="brand-panel">
+      <div class="brand-top">
+        <div class="logo-mark">U</div>
+        <div class="eyebrow">Universidad Peruana Los Andes</div>
+        <div class="brand-title">Panel de <span>portafolio</span></div>
+      </div>
+
+      <p class="brand-copy">
+        Acceso administrativo para publicar, organizar y gestionar los trabajos del curso de Arquitectura de Software.
+      </p>
+    </section>
+
+    <section class="login-panel">
+      <div class="login-card">
+        <div class="login-kicker">Acceso privado</div>
+        <h1>Iniciar sesión</h1>
+        <p class="subtitle">Ingresa con tu usuario autorizado para administrar los archivos del portafolio.</p>
+
+        <div class="field">
+          <label for="email">Correo</label>
+          <input id="email" type="email" placeholder="tu-correo@ejemplo.com" autocomplete="email">
+        </div>
+
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+
+        <button id="btnLogin">Entrar al panel</button>
+
+        <p id="msg" class="message"></p>
+
+        <a class="back-link" href="index.html">← Volver al portafolio</a>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { supabase } from './js/supabase.js'
+
+    const msg = document.getElementById('msg')
+    const btn = document.getElementById('btnLogin')
+
+    function setMessage(text, type = '') {
+      msg.textContent = text
+      msg.className = `message ${type}`
+    }
+
+    btn.addEventListener('click', async () => {
+      const email = document.getElementById('email').value.trim()
+      const password = document.getElementById('password').value.trim()
+
+      if (!email || !password) {
+        setMessage('Completa correo y contraseña.', 'error')
+        return
+      }
+
+      btn.disabled = true
+      btn.textContent = 'Ingresando...'
+      setMessage('Verificando credenciales...')
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+
+      if (error) {
+        setMessage('Credenciales incorrectas o usuario no autorizado.', 'error')
+        btn.disabled = false
+        btn.textContent = 'Entrar al panel'
+        return
+      }
+
+      if (!data.session) {
+        setMessage('No se pudo iniciar sesión. Intenta nuevamente.', 'error')
+        btn.disabled = false
+        btn.textContent = 'Entrar al panel'
+        return
+      }
+
+      setMessage('Acceso correcto. Redirigiendo...', 'success')
+      window.location.replace('admin.html')
+    })
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') btn.click()
+    })
+  </script>
+</body>
+</html>
