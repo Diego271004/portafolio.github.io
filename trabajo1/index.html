@@ -67,29 +67,11 @@
     font-size: 14px;
   }
 
-  .nav-info {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
-  }
+  .nav-info { display: flex; flex-direction: column; line-height: 1.2; }
+  .nav-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .nav-sub { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
 
-  .nav-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .nav-sub {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 0;
-  }
+  .nav-links { display: flex; gap: 0; }
 
   .nav-links a {
     text-decoration: none;
@@ -107,11 +89,7 @@
     background: var(--accent-light);
   }
 
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
 
   .btn-login {
     display: flex;
@@ -135,7 +113,6 @@
     color: var(--accent);
   }
 
-  /* HERO REDISEÑADO */
   .hero {
     max-width: 1180px;
     margin: 0 auto;
@@ -294,9 +271,7 @@
     border-right: 1px solid var(--border);
   }
 
-  .hero-info-strip div:last-child {
-    border-right: none;
-  }
+  .hero-info-strip div:last-child { border-right: none; }
 
   .hero-info-strip span {
     display: block;
@@ -402,9 +377,7 @@
     border-radius: 100px;
   }
 
-  .unit-card-body {
-    padding: 16px 18px;
-  }
+  .unit-card-body { padding: 16px 18px; }
 
   .unit-card-body h3 {
     font-size: 15px;
@@ -463,9 +436,7 @@
     transition: border-color 0.15s;
   }
 
-  .acc-item.open {
-    border-color: var(--accent-mid);
-  }
+  .acc-item.open { border-color: var(--accent-mid); }
 
   .acc-header {
     display: flex;
@@ -478,9 +449,7 @@
     user-select: none;
   }
 
-  .acc-header:hover {
-    background: var(--surface);
-  }
+  .acc-header:hover { background: var(--surface); }
 
   .acc-header-left {
     display: flex;
@@ -543,9 +512,7 @@
     border-top: 1px solid var(--border);
   }
 
-  .acc-item.open .acc-body {
-    display: block;
-  }
+  .acc-item.open .acc-body { display: block; }
 
   .file-list {
     display: flex;
@@ -598,6 +565,12 @@
     margin-top: 1px;
   }
 
+  .file-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
   .btn-download {
     display: flex;
     align-items: center;
@@ -607,6 +580,7 @@
     background: white;
     border: 1px solid var(--border);
     color: var(--text);
+    font-family: 'DM Sans', sans-serif;
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
@@ -642,6 +616,90 @@
     100% { background-position: -200% 0; }
   }
 
+  .preview-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: none;
+    background: rgba(15, 27, 45, 0.72);
+    padding: 2rem;
+  }
+
+  .preview-modal.open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .preview-box {
+    width: min(100%, 980px);
+    height: min(88vh, 760px);
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+  }
+
+  .preview-header {
+    height: 54px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .preview-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .preview-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .preview-actions a,
+  .preview-actions button {
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text);
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .preview-body {
+    flex: 1;
+    background: var(--surface);
+    min-height: 0;
+  }
+
+  .preview-body iframe,
+  .preview-body img {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .preview-body img {
+    object-fit: contain;
+    padding: 18px;
+  }
+
   footer {
     border-top: 1px solid var(--border);
     padding: 24px 2rem;
@@ -650,53 +708,43 @@
     color: var(--muted);
   }
 
-  footer strong {
-    color: var(--text);
-  }
+  footer strong { color: var(--text); }
 
   @media (max-width: 768px) {
-    nav {
-      padding: 0 1rem;
-    }
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
 
-    .nav-links {
-      display: none;
-    }
-
-    .hero {
-      padding: 40px 1rem 36px;
-    }
+    .hero { padding: 40px 1rem 36px; }
 
     .hero-shell {
       padding: 42px 24px 24px;
       border-radius: 18px;
     }
 
-    .hero-info-strip {
-      grid-template-columns: 1fr;
-    }
+    .hero-info-strip { grid-template-columns: 1fr; }
 
     .hero-info-strip div {
       border-right: none;
       border-bottom: 1px solid var(--border);
     }
 
-    .hero-info-strip div:last-child {
-      border-bottom: none;
-    }
+    .hero-info-strip div:last-child { border-bottom: none; }
 
-    .section {
-      padding: 40px 1.5rem;
-    }
-
-    .weeks-section {
-      padding: 0 1.5rem 40px;
-    }
+    .section { padding: 40px 1.5rem; }
+    .weeks-section { padding: 0 1.5rem 40px; }
 
     .file-item {
       align-items: flex-start;
       flex-direction: column;
     }
+
+    .file-actions {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .preview-modal { padding: 1rem; }
+    .preview-box { height: 86vh; }
   }
 </style>
 </head>
@@ -782,6 +830,19 @@
 
 <div class="weeks-section">
   <div id="units-accordion"></div>
+</div>
+
+<div class="preview-modal" id="previewModal">
+  <div class="preview-box">
+    <div class="preview-header">
+      <div class="preview-title" id="previewTitle">Vista previa</div>
+      <div class="preview-actions">
+        <a id="previewDownload" href="#" target="_blank" download>Descargar</a>
+        <button type="button" onclick="closePreview()">Cerrar</button>
+      </div>
+    </div>
+    <div class="preview-body" id="previewBody"></div>
+  </div>
 </div>
 
 <footer>
@@ -914,14 +975,23 @@
                 </div>
               </div>
 
-              <a href="${file.archivo_url}" target="_blank" class="btn-download" download>
-                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="7 10 12 15 17 10"/>
-                  <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                Descargar
-              </a>
+              <div class="file-actions">
+                <button
+                  type="button"
+                  class="btn-download"
+                  onclick='openPreview(${JSON.stringify(file.archivo_url || '')}, ${JSON.stringify(file.titulo || 'Trabajo')}, ${JSON.stringify(file.tipo_archivo || file.archivo_nombre || '')})'>
+                  Ver
+                </button>
+
+                <a href="${file.archivo_url}" target="_blank" class="btn-download" download>
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  Descargar
+                </a>
+              </div>
             </div>
           `).join('');
 
@@ -956,7 +1026,7 @@
     if (normalized.includes('xls') || normalized.includes('excel')) return 'XLS';
     if (normalized.includes('ppt') || normalized.includes('slide')) return 'PPT';
     if (normalized.includes('zip') || normalized.includes('rar')) return 'ZIP';
-    if (normalized.includes('png') || normalized.includes('jpg') || normalized.includes('jpeg')) return 'IMG';
+    if (normalized.includes('png') || normalized.includes('jpg') || normalized.includes('jpeg') || normalized.includes('webp') || normalized.includes('gif')) return 'IMG';
 
     return 'FILE';
   }
@@ -1007,6 +1077,60 @@
       });
     });
   }
+
+  function openPreview(url, title, type) {
+    const modal = document.getElementById('previewModal');
+    const body = document.getElementById('previewBody');
+    const titleEl = document.getElementById('previewTitle');
+    const download = document.getElementById('previewDownload');
+
+    const cleanType = String(type || '').toLowerCase();
+    const cleanUrl = String(url || '');
+
+    titleEl.textContent = title || 'Vista previa';
+    download.href = cleanUrl;
+    body.innerHTML = '';
+
+    if (cleanType.includes('pdf') || /\.pdf(\?|$)/i.test(cleanUrl)) {
+      body.innerHTML = `<iframe src="${cleanUrl}"></iframe>`;
+    } else if (
+      cleanType.includes('png') ||
+      cleanType.includes('jpg') ||
+      cleanType.includes('jpeg') ||
+      cleanType.includes('webp') ||
+      cleanType.includes('gif') ||
+      /\.(png|jpg|jpeg|webp|gif)(\?|$)/i.test(cleanUrl)
+    ) {
+      body.innerHTML = `<img src="${cleanUrl}" alt="${escapeHtml(title || 'Vista previa')}">`;
+    } else {
+      body.innerHTML = `
+        <div class="empty-state" style="padding:40px;">
+          Este tipo de archivo no se puede visualizar directamente aquí.
+          <br><br>
+          Usa el botón Descargar para abrirlo en tu dispositivo.
+        </div>
+      `;
+    }
+
+    modal.classList.add('open');
+  }
+
+  function closePreview() {
+    const modal = document.getElementById('previewModal');
+    const body = document.getElementById('previewBody');
+
+    modal.classList.remove('open');
+    body.innerHTML = '';
+  }
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closePreview();
+  });
+
+  document.addEventListener('click', event => {
+    const modal = document.getElementById('previewModal');
+    if (event.target === modal) closePreview();
+  });
 
   function escapeHtml(value) {
     return String(value || '')
