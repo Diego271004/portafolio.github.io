@@ -690,6 +690,7 @@
     flex: 1;
     background: var(--surface);
     min-height: 0;
+    overflow: auto;
   }
 
   .preview-body iframe,
@@ -842,6 +843,9 @@
     <div class="preview-header">
       <div class="preview-title" id="previewTitle">Vista previa</div>
       <div class="preview-actions">
+        <button type="button" onclick="zoomOut()">−</button>
+<button type="button" onclick="zoomIn()">+</button>
+<button type="button" onclick="resetZoom()">100%</button>
         <a id="previewDownload" href="#" target="_blank" download>Descargar</a>
         <button type="button" onclick="closePreview()">Cerrar</button>
       </div>
@@ -1082,7 +1086,32 @@
       });
     });
   }
+let currentZoom = 1;
+function applyZoom() {
+  const preview = document.querySelector('#previewBody iframe, #previewBody img');
 
+  if (!preview) return;
+
+  preview.style.transform = `scale(${currentZoom})`;
+  preview.style.transformOrigin = 'top center';
+}
+
+function zoomIn() {
+  currentZoom += 0.1;
+  applyZoom();
+}
+
+function zoomOut() {
+  if (currentZoom > 0.5) {
+    currentZoom -= 0.1;
+    applyZoom();
+  }
+}
+
+function resetZoom() {
+  currentZoom = 1;
+  applyZoom();
+}
   function openPreview(url, title, type) {
     const modal = document.getElementById('previewModal');
     const body = document.getElementById('previewBody');
@@ -1097,7 +1126,12 @@
     body.innerHTML = '';
 
     if (cleanType.includes('pdf') || /\.pdf(\?|$)/i.test(cleanUrl)) {
-      body.innerHTML = `<iframe src="${cleanUrl}"></iframe>`;
+     body.innerHTML = `
+  <iframe 
+    src="${cleanUrl}#zoom=125" 
+    style="transform: scale(${currentZoom}); transform-origin: top center;">
+  </iframe>
+`;
     } else if (
       cleanType.includes('png') ||
       cleanType.includes('jpg') ||
@@ -1106,7 +1140,12 @@
       cleanType.includes('gif') ||
       /\.(png|jpg|jpeg|webp|gif)(\?|$)/i.test(cleanUrl)
     ) {
-      body.innerHTML = `<img src="${cleanUrl}" alt="${escapeHtml(title || 'Vista previa')}">`;
+      body.innerHTML = `
+  <img 
+    src="${cleanUrl}" 
+    alt="${escapeHtml(title || 'Vista previa')}"
+    style="transform: scale(${currentZoom}); transform-origin: top center;">
+`;
     } else {
       body.innerHTML = `
         <div class="empty-state" style="padding:40px;">
